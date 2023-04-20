@@ -87,7 +87,7 @@
 			const currency = document.getElementById("currency").value;
 
 			// Send API request
-			fetch("/convert?brl=" + brl + "&currency=" + currency)
+			fetch("http://localhost:8080/convert?brl=" + brl + "&currency=" + currency)
 				.then(response => response.json())
 				.then(data => {
 					// Update result

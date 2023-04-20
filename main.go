@@ -8,13 +8,14 @@ import (
 )
 
 type ExchangeRate struct {
-	Result   string             `json:"result"`
-	From     string             `json:"from"`
-	To       string             `json:"to"`
-	Exchange string             `json:"exchange_rate"`
+	Result   string `json:"result"`
+	From     string `json:"from"`
+	To       string `json:"to"`
+	Exchange string `json:"exchange_rate"`
 }
 
 func convertHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Failed to parse request parameters", http.StatusBadRequest)
@@ -74,7 +75,14 @@ func convertHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func main() {
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fs)
+
 	http.HandleFunc("/convert", convertHandler)
 	http.ListenAndServe(":8080", nil)
 }
