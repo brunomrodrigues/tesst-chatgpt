@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Money Converter</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f1f1f1;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 20px;
+		}
+		.form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #fff;
+			border-radius: 5px;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		input[type="text"] {
+			font-size: 16px;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			margin-bottom: 10px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			width: 100%;
+			box-sizing: border-box;
+		}
+		button {
+			font-size: 16px;
+			padding: 10px 20px;
+			border-radius: 5px;
+			border: none;
+			background-color: #4CAF50;
+			color: #fff;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+		.result {
+			margin-top: 20px;
+			background-color: #fff;
+			border-radius: 5px;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			display: none;
+		}
+		.result p {
+			font-size: 16px;
+			margin: 0;
+		}
+		.result span {
+			font-weight: bold;
+			margin-right: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="form">
+			<h2>Money Converter</h2>
+			<label for="brl">BRL:</label>
+			<input type="text" id="brl">
+			<label for="currency">Currency:</label>
+			<input type="text" id="currency">
+			<button onclick="convert()">Convert</button>
+		</div>
+		<div class="result" id="result">
+			<p>Converted amount:</p>
+			<p><span id="brlResult"></span>BRL = <span id="currencyResult"></span></p>
+		</div>
+	</div>
+
+	<script>
+		function convert() {
+			// Get input values
+			const brl = document.getElementById("brl").value;
+			const currency = document.getElementById("currency").value;
+
+			// Send API request
+			fetch("/convert?brl=" + brl + "&currency=" + currency)
+				.then(response => response.json())
+				.then(data => {
+					// Update result
+					document.getElementById("brlResult").textContent = data.brl;
+					document.getElementById("currencyResult").textContent = data.converted.toFixed(2);
+					document.getElementById("result").style.display = "block";
+				})
+				.catch(error => alert(error));
+		}
+	</script>
+</body>
+</html>
